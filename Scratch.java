@@ -298,6 +298,7 @@ public class Scratch{
 
 	return true;
     }
+    
     public static String shortestPalindrome(String str){ //come back to this later to make O(n)
 	for(int i = 1; 0 < str.length() + 1; i++){
 	    String appended = str + new StringBuilder(str.substring(0,i)).reverse().toString();
@@ -306,14 +307,23 @@ public class Scratch{
 		return appended;
 	    }
 	}
+	
 	return "NA";
     }
 
     public static void runShortestPalindrome(){
 	System.out.println(shortestPalindrome("bannana"));
     }
-    
-    public static void main(String[] args) {
-	
+
+    public static void minTestRBTrees(){
+	RBTree<Integer> tree = new RBTree<Integer>();
+
+	tree.insert(5);
+	tree.insert(4);
+
+	System.out.println(tree.root.getLeft().getValue());
+    }
+
+    public static void main(String[] args){
     }
 }
