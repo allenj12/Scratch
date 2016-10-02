@@ -1,13 +1,13 @@
 
 public class RBTree<T extends Comparable<T>>{
-    public RBNode<T> root;
+    public RBNode root;
 
     RBTree(){
 	this.root = null;
     }
 
     public boolean search(T value){
-	RBNode<T> current = this.root;
+	RBNode current = this.root;
 	while(current != null){
 	    if(value.compareTo(current.value) == 0){
 		return true;
@@ -23,20 +23,18 @@ public class RBTree<T extends Comparable<T>>{
     }
 
     public void insert(T value){
-	RBNode<T> current = this.root;
+	RBNode current = this.root;
 	if(current == null){
-	    RBNode<T> newRoot = new RBNode<T>(null, null, null, value);
-	    newRoot.insertCase1();
-	    this.root = newRoot;
-	}
+	    RBNode newRoot = new RBNode(null, null, null, value);
+	    newRoot.insertCase1();	}
 	else{
 	    boolean inserted = false;
 	    while(!inserted){
 		if(value.compareTo(current.value) == 0){inserted = true;}
 		if(value.compareTo(current.value) < 0){
-		    RBNode<T> left = current.left;
+		    RBNode left = current.left;
 		    if(left == null){
-			left = new RBNode<T>(current, null, null, value);
+			left = new RBNode(current, null, null, value);
 			current.setLeft(left);
 			left.insertCase1();
 			inserted = true;
@@ -46,9 +44,9 @@ public class RBTree<T extends Comparable<T>>{
 		    }
 		}
 		else if(value.compareTo(current.value) > 0){
-		    RBNode<T> right = current.right;
+		    RBNode right = current.right;
 		    if(right == null){
-			right = new RBNode<T>(current, null, null, value);
+			right = new RBNode(current, null, null, value);
 			current.setRight(right);
 			right.insertCase1();
 			inserted = true;
@@ -61,15 +59,15 @@ public class RBTree<T extends Comparable<T>>{
 	}
     }
     
-    public class RBNode<Y extends Comparable<Y>>{
+    public class RBNode{
 
-	private RBNode<Y> parent;
-	private RBNode<Y> left; 
-	private RBNode<Y> right;
-	private Y value;
+	private RBNode parent;
+	private RBNode left; 
+	private RBNode right;
+	private T value;
 	private boolean red;
 
-	RBNode(RBNode<Y> parent, RBNode<Y> left, RBNode<Y> right, Y value){
+	RBNode(RBNode parent, RBNode left, RBNode right, T value){
 	    this.parent = parent;
 	    this.left = left;
 	    this.right = right;
@@ -77,13 +75,13 @@ public class RBTree<T extends Comparable<T>>{
 	    this.red = true;
 	}
 
-	RBNode(Y value){
+	RBNode(T value){
 	    this.value = value;
 	}
 
-	public RBNode<Y> grandparent(){
-	    RBNode<Y> parent = this.parent;
-	    RBNode<Y> grandparent = parent.parent;
+	public RBNode grandparent(){
+	    RBNode parent = this.parent;
+	    RBNode grandparent = parent.parent;
 	    if(parent != null && grandparent != null){
 		return grandparent;
 	    }
@@ -92,8 +90,8 @@ public class RBTree<T extends Comparable<T>>{
 	    }
 	}
 
-	public RBNode<Y> uncle(){
-	    RBNode<Y> grandparent = this.grandparent();
+	public RBNode uncle(){
+	    RBNode grandparent = this.grandparent();
 	    if(grandparent == null){
 		return null; 
 	    }
@@ -107,30 +105,26 @@ public class RBTree<T extends Comparable<T>>{
 	    }
 	}
 
-	private void rotateRight(RBNode<Y> node){
-	    RBNode<Y> parent = node.parent;
-	    RBNode<Y> grandparent = parent.grandparent();
-	    RBNode<Y> savedParent = grandparent.right;
-	    RBNode<Y> savedRightN = node.right;
+	private void rotateRight(RBNode node){
+	    RBNode grandparent = parent.grandparent();
+	    RBNode savedParent = grandparent.right;
 
 	    grandparent.right = node;
 	    node.right = savedParent;
-	    savedParent.right = savedRightN;
+	    savedParent.left = null;
 	}
     
-	private void rotateLeft(RBNode<Y> node){
-	    RBNode<Y> parent = node.parent;
-	    RBNode<Y> grandparent = parent.grandparent();
-	    RBNode<Y> savedParent = grandparent.left;
-	    RBNode<Y> savedLeftN = node.left;
+	private void rotateLeft(RBNode node){
+	    RBNode grandparent = node.grandparent();
+	    RBNode savedParent = node.parent;
 
 	    grandparent.left = node;
 	    node.left = savedParent;
-	    savedParent.right = savedLeftN;
+	    savedParent.right = null;
 	}
 
 	private void insertCase5(){
-	    RBNode<Y> grandparent = this.grandparent();
+	    RBNode grandparent = this.grandparent();
 
 	    this.parent.red = false;
 	    grandparent.red = true;
@@ -143,8 +137,8 @@ public class RBTree<T extends Comparable<T>>{
 	}
 
 	private void insertCase4(){
-	    RBNode<Y> grandparent = this.grandparent();
-	    RBNode<Y> node = this;
+	    RBNode grandparent = this.grandparent();
+	    RBNode node = this;
 
 	    if((node == node.parent.right) && (node.parent == grandparent.left)){
 		rotateLeft(node);
@@ -164,8 +158,8 @@ public class RBTree<T extends Comparable<T>>{
 	}
 
 	private void insertCase3(){
-	    RBNode<Y> uncle = this.uncle();
-	    RBNode<Y> grandparent = this.grandparent();
+	    RBNode uncle = this.uncle();
+	    RBNode grandparent = this.grandparent();
 
 	    if(uncle != null && uncle.red == true){
 		parent.red = false;
@@ -191,6 +185,7 @@ public class RBTree<T extends Comparable<T>>{
 	private void insertCase1(){
 	    if(this.parent == null){
 		this.red = false;
+		RBTree.this.root = this;
 	    }
 	    else{
 		this.insertCase2();
@@ -200,56 +195,56 @@ public class RBTree<T extends Comparable<T>>{
 	/**
 	 * @return the parent
 	 */
-	public RBNode<Y> getParent() {
+	public RBNode getParent() {
 	    return parent;
 	}
 
 	/**
 	 * @param parent the parent to set
 	 */
-	public void setParent(RBNode<Y> parent) {
+	public void setParent(RBNode parent) {
 	    this.parent = parent;
 	}
 
 	/**
 	 * @return the left
 	 */
-	public RBNode<Y> getLeft() {
+	public RBNode getLeft() {
 	    return left;
 	}
 
 	/**
 	 * @param left the left to set
 	 */
-	public void setLeft(RBNode<Y> left) {
+	public void setLeft(RBNode left) {
 	    this.left = left;
 	}
 
 	/**
 	 * @return the right
 	 */
-	public RBNode<Y> getRight() {
+	public RBNode getRight() {
 	    return right;
 	}
 
 	/**
 	 * @param right the right to set
 	 */
-	public void setRight(RBNode<Y> right) {
+	public void setRight(RBNode right) {
 	    this.right = right;
 	}
 
 	/**
 	 * @return the value
 	 */
-	public Y getValue() {
+	public T getValue() {
 	    return value;
 	}
 
 	/**
 	 * @param value the value to set
 	 */
-	public void setValue(Y value) {
+	public void setValue(T value) {
 	    this.value = value;
 	}
 

@@ -318,12 +318,14 @@ public class Scratch{
     public static void minTestRBTrees(){
 	RBTree<Integer> tree = new RBTree<Integer>();
 
+	tree.insert(10);
 	tree.insert(5);
 	tree.insert(4);
 
-	System.out.println(tree.root.getLeft().getValue());
+	System.out.println(tree.root.getValue());
     }
 
     public static void main(String[] args){
+	// fix later rotate functions broken! minTestRBTrees();
     }
 }
