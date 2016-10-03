@@ -107,9 +107,14 @@ public class RBTree<T extends Comparable<T>>{
 
 	private void rotateRight(RBNode node){
 	    RBNode grandparent = parent.grandparent();
-	    RBNode savedParent = grandparent.right;
+	    RBNode savedParent = node.parent;
 
-	    grandparent.right = node;
+	    if(grandparent == null){
+		RBTree.this.root = this;
+	    }
+	    else{
+		grandparent.right = node;
+	    }
 	    node.right = savedParent;
 	    savedParent.left = null;
 	}
@@ -118,7 +123,13 @@ public class RBTree<T extends Comparable<T>>{
 	    RBNode grandparent = node.grandparent();
 	    RBNode savedParent = node.parent;
 
-	    grandparent.left = node;
+	    if(grandparent == null){
+		RBTree.this.root = this;
+	    }
+	    else{
+		grandparent.left = node;
+	    }
+	    
 	    node.left = savedParent;
 	    savedParent.right = null;
 	}

@@ -326,6 +326,6 @@ public class Scratch{
     }
 
     public static void main(String[] args){
-	// fix later rotate functions broken! minTestRBTrees();
+	minTestRBTrees();
     }
 }
