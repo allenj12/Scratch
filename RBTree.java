@@ -134,7 +134,6 @@ public class RBTree<T extends Comparable<T>>{
 	    while(rightEnd.right != null){
 		rightEnd = rightEnd.right;
 	    }
-	    System.out.println(rightEnd.value);
 	    rightEnd.right = savedParent;
 	    savedParent.left = null;
 	    savedParent.parent = rightEnd;
