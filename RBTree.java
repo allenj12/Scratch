@@ -123,15 +123,21 @@ public class RBTree<T extends Comparable<T>>{
 	    RBNode savedParent = node.parent;
 
 	    if(grandparent == null){
-		RBTree.this.root = this;
+		RBTree.this.root = node;
+		node.parent = null;
 	    }
 	    else{
 		grandparent.right = node;
 		node.parent = grandparent;
 	    }
-	    node.right = savedParent;
+	    RBNode rightEnd = node;
+	    while(rightEnd.right != null){
+		rightEnd = rightEnd.right;
+	    }
+	    System.out.println(rightEnd.value);
+	    rightEnd.right = savedParent;
 	    savedParent.left = null;
-	    savedParent.parent = node;
+	    savedParent.parent = rightEnd;
 	}
     
 	private void rotateLeft(RBNode node){
@@ -139,16 +145,20 @@ public class RBTree<T extends Comparable<T>>{
 	    RBNode savedParent = node.parent;
 
 	    if(grandparent == null){
-		RBTree.this.root = this;
+		RBTree.this.root = node;
+		node.parent = null;
 	    }
 	    else{
 		grandparent.left = node;
 		node.parent = grandparent;
 	    }
-	    
-	    node.left = savedParent;
+	    RBNode leftEnd = node;
+	    while(leftEnd.left != null){
+		leftEnd = leftEnd.left;
+	    }
+	    leftEnd.left = savedParent;
 	    savedParent.right = null;
-	    savedParent.parent = node;
+	    savedParent.parent = leftEnd;
 	}
 
 	private void insertedStraight(){

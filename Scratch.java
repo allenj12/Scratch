@@ -325,8 +325,9 @@ public class Scratch{
 	tree.insert(74);
 	tree.insert(51);
 	tree.insert(52);
+	tree.printTree(tree.root);
 	tree.insert(1);
-	tree.insert(2);
+	//tree.insert(2);
 	System.out.println(tree.root.getValue());
 	tree.printTree(tree.root);
     }
