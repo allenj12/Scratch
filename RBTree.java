@@ -22,11 +22,24 @@ public class RBTree<T extends Comparable<T>>{
 	return false;
     }
 
+    public void printTree(RBNode node){
+	if(node != null){
+	    System.out.println(node.value +
+			       ": " + (node.red ? "RED" : "BLACK") +
+			       ": " + (node.parent == null ? "null" : node.parent.value) +
+			       ": " + (node.left == null ? "null" : node.left.value) +
+			       ": " + (node.right == null ? "null" : node.right.value));
+
+	    printTree(node.left);
+	    printTree(node.right);
+	}
+    }
+
     public void insert(T value){
 	RBNode current = this.root;
 	if(current == null){
 	    RBNode newRoot = new RBNode(null, null, null, value);
-	    newRoot.insertCase1();	}
+	    newRoot.insertedRoot();	}
 	else{
 	    boolean inserted = false;
 	    while(!inserted){
@@ -35,8 +48,8 @@ public class RBTree<T extends Comparable<T>>{
 		    RBNode left = current.left;
 		    if(left == null){
 			left = new RBNode(current, null, null, value);
-			current.setLeft(left);
-			left.insertCase1();
+			current.left = left;
+			left.insertedRoot();
 			inserted = true;
 		    }
 		    else{
@@ -47,8 +60,8 @@ public class RBTree<T extends Comparable<T>>{
 		    RBNode right = current.right;
 		    if(right == null){
 			right = new RBNode(current, null, null, value);
-			current.setRight(right);
-			right.insertCase1();
+			current.right = right;
+			right.insertedRoot();
 			inserted = true;
 		    }
 		    else{
@@ -106,7 +119,7 @@ public class RBTree<T extends Comparable<T>>{
 	}
 
 	private void rotateRight(RBNode node){
-	    RBNode grandparent = parent.grandparent();
+	    RBNode grandparent = node.grandparent();
 	    RBNode savedParent = node.parent;
 
 	    if(grandparent == null){
@@ -114,9 +127,11 @@ public class RBTree<T extends Comparable<T>>{
 	    }
 	    else{
 		grandparent.right = node;
+		node.parent = grandparent;
 	    }
 	    node.right = savedParent;
 	    savedParent.left = null;
+	    savedParent.parent = node;
 	}
     
 	private void rotateLeft(RBNode node){
@@ -128,13 +143,16 @@ public class RBTree<T extends Comparable<T>>{
 	    }
 	    else{
 		grandparent.left = node;
+		node.parent = grandparent;
 	    }
 	    
 	    node.left = savedParent;
 	    savedParent.right = null;
+	    savedParent.parent = node;
 	}
 
-	private void insertCase5(){
+	private void insertedStraight(){
+	    System.out.println("CASE 5");
 	    RBNode grandparent = this.grandparent();
 
 	    this.parent.red = false;
@@ -147,28 +165,25 @@ public class RBTree<T extends Comparable<T>>{
 	    }
 	}
 
-	private void insertCase4(){
+	private void insertedZigZag(){
 	    RBNode grandparent = this.grandparent();
 	    RBNode node = this;
 
 	    if((node == node.parent.right) && (node.parent == grandparent.left)){
 		rotateLeft(node);
-
 		node = node.left;
+		System.out.println("CASE 4");
 	    }
 
 	    else if((node == node.parent.left) && (node.parent == grandparent.right)){
 		rotateRight(node);
-
-		node = node.right;
+		    node = node.right;
+		System.out.println("CASE 4");
 	    }
-	    else{
-		node.insertCase5();
-	    }
-	
+	    node.insertedStraight();
 	}
 
-	private void insertCase3(){
+	private void insertedParentUncleRed(){
 	    RBNode uncle = this.uncle();
 	    RBNode grandparent = this.grandparent();
 
@@ -176,30 +191,33 @@ public class RBTree<T extends Comparable<T>>{
 		parent.red = false;
 		uncle.red = false;
 		grandparent.red = true;
+
+		System.out.println("CASE 3");
 		
-		grandparent.insertCase1();
+		grandparent.insertedRoot();
 	    }
 	    else{
-		this.insertCase4();
+		this.insertedZigZag();
 	    }
 	}
 
-	private void insertCase2(){
-	    if(this.parent.red == false){
-		return;
+	private void insertedParentBlack(){
+	    if(this.parent.red == true){
+		this.insertedParentUncleRed();
 	    }
 	    else{
-		this.insertCase3();
+		System.out.println("CASE 2");
 	    }
 	}
 
-	private void insertCase1(){
+	private void insertedRoot(){
 	    if(this.parent == null){
 		this.red = false;
 		RBTree.this.root = this;
+		System.out.println("CASE 1");
 	    }
 	    else{
-		this.insertCase2();
+		this.insertedParentBlack();
 	    }
 	}
 	
@@ -209,26 +227,12 @@ public class RBTree<T extends Comparable<T>>{
 	public RBNode getParent() {
 	    return parent;
 	}
-
-	/**
-	 * @param parent the parent to set
-	 */
-	public void setParent(RBNode parent) {
-	    this.parent = parent;
-	}
-
+	
 	/**
 	 * @return the left
 	 */
 	public RBNode getLeft() {
 	    return left;
-	}
-
-	/**
-	 * @param left the left to set
-	 */
-	public void setLeft(RBNode left) {
-	    this.left = left;
 	}
 
 	/**
@@ -239,13 +243,6 @@ public class RBTree<T extends Comparable<T>>{
 	}
 
 	/**
-	 * @param right the right to set
-	 */
-	public void setRight(RBNode right) {
-	    this.right = right;
-	}
-
-	/**
 	 * @return the value
 	 */
 	public T getValue() {
@@ -253,24 +250,10 @@ public class RBTree<T extends Comparable<T>>{
 	}
 
 	/**
-	 * @param value the value to set
-	 */
-	public void setValue(T value) {
-	    this.value = value;
-	}
-
-	/**
 	 * @return the red
 	 */
 	public boolean isRed() {
 	    return red;
-	}
-
-	/**
-	 * @param red the red to set
-	 */
-	public void setRed(boolean red) {
-	    this.red = red;
 	}
     }
 }

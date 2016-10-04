@@ -318,11 +318,17 @@ public class Scratch{
     public static void minTestRBTrees(){
 	RBTree<Integer> tree = new RBTree<Integer>();
 
-	tree.insert(10);
-	tree.insert(5);
-	tree.insert(4);
-
+	tree.insert(100);
+	tree.insert(150);
+	tree.insert(50);
+	tree.insert(75);
+	tree.insert(74);
+	tree.insert(51);
+	tree.insert(52);
+	tree.insert(1);
+	tree.insert(2);
 	System.out.println(tree.root.getValue());
+	tree.printTree(tree.root);
     }
 
     public static void main(String[] args){
