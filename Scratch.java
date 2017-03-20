@@ -1,6 +1,7 @@
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Stack;
 
 public class Scratch{
 
@@ -318,7 +319,7 @@ public class Scratch{
     public static void minTestRBTrees(){
 	RBTree<Integer> tree = new RBTree<Integer>();
 
-	itree.insert(100);
+	tree.insert(100);
 	tree.insert(150);
 	tree.insert(50);
 	tree.insert(75);
@@ -332,7 +333,182 @@ public class Scratch{
 	tree.printTree(tree.root);
     }
 
+    public static void pushh(int elem, Stack<Integer> left, Stack<Integer> right){
+	right.push(elem);
+    }
+
+    public static int popp(Stack<Integer> left, Stack<Integer> right){
+	if(!left.isEmpty()){
+	    return left.pop();
+	}
+	else{
+	    while(!right.isEmpty()){
+		left.push(right.pop());
+	    }
+	    if(!left.isEmpty()){
+		return left.pop();
+	    }
+	    else{
+		return 0;
+	    }
+	}
+    }
+
+    public static void runTwoStackQueue(){
+	Stack<Integer> l = new Stack<Integer>();
+	Stack<Integer> r = new Stack<Integer>();
+
+	pushh(1,l,r);
+	pushh(2,l,r);
+	pushh(3,l,r);
+	System.out.println(r);
+	System.out.println(l);
+	
+	System.out.println("-------------");
+
+	int x = popp(l,r);
+	System.out.println(r);
+	System.out.println(l);
+	System.out.println(x);
+
+	System.out.println("-------------");
+	
+	pushh(4,l,r);
+	pushh(5,l,r);
+	pushh(6,l,r);
+	System.out.println(r);
+	System.out.println(l);
+
+	System.out.println("-------------");
+
+	x = popp(l,r);
+	System.out.println(r);
+	System.out.println(l);
+	System.out.println(x);
+
+	System.out.println("-------------");
+
+	x = popp(l,r);
+	System.out.println(r);
+	System.out.println(l);
+	System.out.println(x);
+
+	System.out.println("-------------");
+
+	x = popp(l,r);
+	System.out.println(r);
+	System.out.println(l);
+	System.out.println(x);
+
+	System.out.println("-------------");
+
+	x = popp(l,r);
+	System.out.println(r);
+	System.out.println(l);
+	System.out.println(x);
+
+	System.out.println("-------------");
+
+	x = popp(l,r);
+	System.out.println(r);
+	System.out.println(l);
+	System.out.println(x);
+
+	System.out.println("-------------");
+
+	x = popp(l,r);
+	System.out.println(r);
+	System.out.println(l);
+	System.out.println(x);
+    }
+
+    // Returns the length of the longest palindromic subsequence in seq
+    static int lpSubsequence(String seq)
+    {
+       int n = seq.length();
+       int i, j, cl;
+       int L[][] = new int[n][n];  // Create a table to store results of subproblems
+      
+       // Strings of length 1 are palindrome of lentgh 1
+       for (i = 0; i < n; i++)
+           L[i][i] = 1;
+              
+        // Build the table. Note that the lower diagonal values of table are
+        // useless and not filled in the process. The values are filled in a
+        // manner similar to Matrix Chain Multiplication DP solution (See
+        // http://www.geeksforgeeks.org/archives/15553). cl is length of
+        // substring
+        for (cl=2; cl<=n; cl++)
+        {
+            for (i=0; i<n-cl+1; i++)
+            {
+                j = i+cl-1;
+                if (seq.charAt(i) == seq.charAt(j) && cl == 2)
+                   L[i][j] = 2;
+                else if (seq.charAt(i) == seq.charAt(j))
+                   L[i][j] = L[i+1][j-1] + 2;
+                else
+                   L[i][j] = Math.max(L[i][j-1], L[i+1][j]);
+            }
+        }
+              
+        return L[0][n-1];
+    }
+
+    public static int lpSubstring(String str)
+    {
+	int n = str.length(); // get length of input string
+ 
+	// table[i][j] will be false if substring str[i..j]
+	// is not palindrome.
+	// Else table[i][j] will be true
+	boolean[][] table = new boolean[n][n];
+ 
+	// All substrings of length 1 are palindromes
+	int maxLength = 1;
+	for (int i = 0; i < n; ++i)
+	    table[i][i] = true;
+ 
+	for (int i = 0; i < n-1; ++i)
+	    {
+		if (str.charAt(i) == str.charAt(i+1))
+		    {
+			table[i][i+1] = true;
+			maxLength = 2;
+		    }
+	    }
+ 
+	// Check for lengths greater than 2. k is length
+	// of substring
+	for (int k = 3; k <= n; ++k)
+	    {
+		// Fix the starting index
+		for (int i = 0; i < n-k+1 ; ++i)
+		    {
+			// Get the ending index of substring from
+			// starting index i and length k
+			int j = i + k - 1;
+ 
+			// checking for sub-string from ith index to
+			// jth index iff str[i+1] to str[j-1] is a
+			// palindrome
+			if (table[i+1][j-1] && str.charAt(i) == str.charAt(j))
+			    {
+				table[i][j] = true;
+ 
+				if (k > maxLength)
+				    {
+					maxLength = k;
+				    }
+			    }
+		    }
+	    }
+	return maxLength;
+    }
+
     public static void main(String[] args){
-	minTestRBTrees();
+	//runTwoStackQueue();
+	System.out.println(lpSubsequence("annxa"));
+	System.out.println(lpSubstring("annxa"));
     }
 }
